@@ -15,6 +15,10 @@ jest.mock('@react-navigation/elements', () => ({
   useHeaderHeight: () => 0,
 }));
 
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: () => ({ top: 0 }),
+}));
+
 jest.useFakeTimers();
 
 describe('given an ErrorScreen component', () => {
