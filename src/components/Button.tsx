@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 import {
   GestureResponderEvent,
   StyleSheet,
@@ -14,11 +14,11 @@ interface IProps {
   onPress: (event: GestureResponderEvent) => void;
   title: string;
   buttonType?: 'primary' | 'secondary' | 'outline';
-  icon?: React.FC<IconProps>;
+  icon?: FC<IconProps>;
   disabled?: boolean;
 }
 
-export const Button: React.FC<IProps> = ({
+export const Button: FC<IProps> = ({
   title,
   buttonType = 'primary',
   icon: Icon,
@@ -37,31 +37,24 @@ export const Button: React.FC<IProps> = ({
       onPress={onPress}
       disabled={disabled}
     >
-      <>
-        <Text
-          style={[
-            styles.buttonText,
-            buttonType === 'primary' ? styles.buttonPrimaryText : {},
-            buttonType === 'secondary' ? styles.buttonSecondaryText : {},
-            buttonType === 'outline' ? styles.buttonOutlineText : {},
-          ]}
-        >
-          {title}
-        </Text>
+      <Text
+        style={[
+          styles.buttonText,
+          buttonType === 'primary' ? styles.buttonPrimaryText : {},
+          buttonType === 'secondary' ? styles.buttonSecondaryText : {},
+          buttonType === 'outline' ? styles.buttonOutlineText : {},
+          Icon ? styles.textMargin : {},
+        ]}
+      >
+        {title}
+      </Text>
 
-        {Icon && (
-          <>
-            <Spacer width={theme.space8} />
-
-            <Icon
-              size={theme.fontSize16}
-              color={
-                buttonType === 'primary' ? theme.colorWhite : theme.colorBlack
-              }
-            />
-          </>
-        )}
-      </>
+      {Icon && (
+        <Icon
+          size={theme.fontSize16}
+          color={buttonType === 'primary' ? theme.colorWhite : theme.colorBlack}
+        />
+      )}
     </TouchableOpacity>
   );
 };
@@ -93,6 +86,9 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: theme.fontSemiBold,
     fontSize: theme.fontSize16,
+  },
+  textMargin: {
+    marginRight: theme.space8,
   },
   buttonPrimaryText: {
     color: theme.colorWhite,

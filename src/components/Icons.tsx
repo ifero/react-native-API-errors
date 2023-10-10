@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef, FC } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 import { theme } from '../utils/theme';
@@ -10,7 +10,7 @@ export type IconProps = {
   color?: string;
 };
 
-export const NearFormLogo = React.forwardRef<Svg, IconProps>(
+export const NearFormLogo = forwardRef<Svg, IconProps>(
   ({ size = DEFAULT_SIZE, color = theme.colorWhite }, ref) => (
     <Svg width={size} height={size} viewBox="0 0 300 300" fill="none" ref={ref}>
       <Path
@@ -23,7 +23,7 @@ export const NearFormLogo = React.forwardRef<Svg, IconProps>(
   ),
 );
 
-export const Chevron: React.FC<
+export const Chevron: FC<
   IconProps & { direction: 'up' | 'right' | 'down' | 'left' } & {
     strokeWidth?: number;
   }
