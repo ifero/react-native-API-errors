@@ -1,6 +1,6 @@
 import Toast from 'react-native-toast-message';
 import { FC, PropsWithChildren, useEffect, useRef } from 'react';
-import { Animated, Image, Pressable, StyleSheet, Text } from 'react-native';
+import { Animated, Image, StyleSheet, Text } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { theme } from '../../utils/theme';
 import { Button } from '../../components/Button';
@@ -20,7 +20,6 @@ type Props = {
   description?: string;
   isVisible: boolean;
   notificationType: NotificationType;
-  onHideError: () => void;
 };
 
 export const ErrorScreen: FC<PropsWithChildren<Props>> = ({
@@ -31,6 +30,7 @@ export const ErrorScreen: FC<PropsWithChildren<Props>> = ({
   notificationType,
 }) => {
   const opacityAnimatedValue = useRef(new Animated.Value(0)).current;
+  const zIndex = useRef(-9990);
 
   const headerHeight = useHeaderHeight();
 
@@ -45,6 +45,7 @@ export const ErrorScreen: FC<PropsWithChildren<Props>> = ({
       });
     }
     if (isVisible && notificationType === 'fullScreen') {
+      zIndex.current = 9999;
       Animated.timing(opacityAnimatedValue, {
         toValue: 1,
         duration: 500,
@@ -52,6 +53,7 @@ export const ErrorScreen: FC<PropsWithChildren<Props>> = ({
       }).start();
     }
     if (!isVisible) {
+      zIndex.current = -9999;
       Animated.timing(opacityAnimatedValue, {
         toValue: 0,
         duration: 500,
@@ -67,8 +69,10 @@ export const ErrorScreen: FC<PropsWithChildren<Props>> = ({
   return (
     <>
       <Animated.View
+        testID="animatedView"
         style={{
           opacity: opacityAnimatedValue,
+          zIndex: zIndex.current,
           paddingTop: headerHeight,
           ...styles.errorScreen,
         }}
@@ -104,7 +108,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: theme.space16,
     backgroundColor: theme.colorWhite,
-    zIndex: 9999,
     alignItems: 'center',
   },
   image: { width: '100%', height: 300, marginTop: theme.space32 },

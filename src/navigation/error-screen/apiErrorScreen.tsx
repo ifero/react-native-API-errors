@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren, useContext } from 'react';
-import { APIErrorContext } from './error-screen-provider';
+import { APIErrorContext } from './errorScreenProvider';
 
-import { Action, ErrorScreen, NotificationType } from './error-screen';
+import { Action, ErrorScreen, NotificationType } from './errorScreen';
 
 type Props = {
   notificationType: NotificationType;
@@ -32,7 +32,6 @@ export const APIErrorScreen: FC<PropsWithChildren<Props>> = ({
       actions={[refreshAction]}
       notificationType={notificationType}
       description={errorDescription?.message}
-      onHideError={setIsHidden}
     >
       {children}
     </ErrorScreen>

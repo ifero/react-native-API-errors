@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 
 import { IconProps } from './Icons';
-import { Spacer } from './Spacer';
 import { theme } from '../utils/theme';
 
 interface IProps {
