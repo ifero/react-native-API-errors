@@ -4,6 +4,7 @@ import { Animated, Image, StyleSheet, Text } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { theme } from '../../utils/theme';
 import { Button } from '../../components/Button';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export type Action = {
   accessibilityHint?: string;
@@ -33,6 +34,8 @@ export const ErrorScreen: FC<PropsWithChildren<Props>> = ({
   const zIndex = useRef(-9990);
 
   const headerHeight = useHeaderHeight();
+
+  const { top } = useSafeAreaInsets();
 
   useEffect(() => {
     if (isVisible && notificationType === 'toast') {
@@ -73,7 +76,7 @@ export const ErrorScreen: FC<PropsWithChildren<Props>> = ({
         style={{
           opacity: opacityAnimatedValue,
           zIndex: zIndex.current,
-          paddingTop: headerHeight,
+          paddingTop: headerHeight - top,
           ...styles.errorScreen,
         }}
       >
