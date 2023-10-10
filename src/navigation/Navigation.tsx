@@ -15,6 +15,7 @@ export type RootStackParamList = {
   JokesScreenWithFullScreen: { slug: string };
 };
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NearFormLogo } from '../components/Icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +28,9 @@ const MainStack = () => (
     />
     <Stack.Screen
       name="JokesScreens"
-      component={RandomJoke}
+      component={withErrorWrapper(<RandomJoke />, {
+        notificationType: 'fullScreen',
+      })}
       options={{
         title: 'Random jokes',
         headerTintColor: theme.colorWhite,
@@ -68,7 +71,14 @@ const Navigation = () => {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <NearFormLogo color={color} size={theme.space24} />
+            ),
+            tabBarActiveTintColor: theme.colorPrimaryAccent,
+            tabBarLabelStyle: { fontSize: 14 },
+          }}
           name="Main"
           component={MainStack}
         />
@@ -79,6 +89,13 @@ const Navigation = () => {
           })}
           initialParams={{
             slug: '/afafa',
+          }}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <NearFormLogo color={color} size={theme.space24} />
+            ),
+            tabBarActiveTintColor: theme.colorPrimaryAccent,
+            tabBarLabelStyle: { fontSize: 14 },
           }}
         />
       </Tab.Navigator>
