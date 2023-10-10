@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "jsx": "react-native",
+    "jsxImportSource": "react",
+    "types": [
+      "react-native",
+      "jest",
+      "node",
+    ],
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true
+  }
+}
