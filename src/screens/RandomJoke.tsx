@@ -1,16 +1,20 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { FC, useCallback, useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
 import {
   SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../navigation/Navigation';
 
-import useSWR from 'swr';
 import { Button } from '../components/Button';
 import { flex1, theme } from '../utils/theme';
+import { useGetJokes } from '../hooks/useGetJokes';
 
 const norrisImagesPaths = [
   require('../../assets/chuck-judging.png'),
@@ -28,7 +32,7 @@ const RandomJoke: FC = () => {
     params: { slug },
   } = useRoute<RouteProp<RootStackParamList, 'JokesScreens'>>();
 
-  const { data, error, mutate } = useSWR(slug ?? '/random');
+  const { data, error, mutate } = useGetJokes(slug);
   const headerHeight = useHeaderHeight();
   const { top } = useSafeAreaInsets();
 
@@ -37,6 +41,12 @@ const RandomJoke: FC = () => {
     mutate();
   }, [mutate]);
 
+  const openJokeLink = useCallback(async () => {
+    if (data?.url && (await Linking.canOpenURL(data?.url))) {
+      Linking.openURL(data?.url);
+    }
+  }, [data?.url]);
+
   return (
     <SafeAreaView
       style={{
@@ -44,26 +54,31 @@ const RandomJoke: FC = () => {
         ...styles.safeArea,
       }}
     >
-      <View style={flex1}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={error ? norrisMad : norrisImagesPaths[index]}
-            resizeMode="cover"
-            style={styles.image}
-          />
+      <View style={styles.container}>
+        <View style={flex1}>
+          <View style={styles.imageContainer}>
+            <Image
+              testID={error ? 'madTestID' : 'norrisImageTestID'}
+              source={error ? norrisMad : norrisImagesPaths[index]}
+              resizeMode="cover"
+              style={styles.image}
+            />
+          </View>
+
+          <Text
+            style={{
+              ...styles.text,
+              textAlign: error ? 'center' : 'justify',
+            }}
+          >
+            {error ? 'How dare you! ' : data?.value}
+          </Text>
         </View>
 
-        <Text
-          style={{
-            ...styles.text,
-            textAlign: error ? 'center' : 'justify',
-          }}
-        >
-          {error ? 'How dare you! ' : data?.value}
-        </Text>
+        <Button onPress={refreshJoke} title="Refresh" />
+        <View style={{ height: 16 }} />
+        <Button onPress={openJokeLink} title="Open in browser" />
       </View>
-
-      <Button onPress={refreshJoke} title="Refresh" />
     </SafeAreaView>
   );
 };
@@ -72,7 +87,10 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: theme.colorSecondaryAccent,
-    paddingHorizontal: theme.space16,
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
   imageContainer: {
     alignSelf: 'center',

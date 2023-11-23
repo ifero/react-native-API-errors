@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { FC } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProps } from '../navigation/Navigation';
 import { flex1, theme } from '../utils/theme';
@@ -31,6 +31,9 @@ const Main: FC = () => {
               navigate('JokesScreenWithFullScreen', { slug: '/fault' })
             }
           />
+          <Text>
+            This is {Platform.OS === 'android' ? 'Android' : 'iOS'} simulator
+          </Text>
         </View>
       </View>
     </SafeAreaView>
